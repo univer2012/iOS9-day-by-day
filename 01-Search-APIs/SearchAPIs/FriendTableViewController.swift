@@ -16,43 +16,41 @@ class FriendTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
         datasource.savePeopleToIndex()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let destination = segue.destinationViewController as! FriendViewController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as! FriendViewController
         destination.person = lastSelectedFriend!
     }
     
     func showFriend(id: String) {
-        lastSelectedFriend = datasource.friendFromID(id)
-        performSegueWithIdentifier("showFriend", sender: self)
+        lastSelectedFriend = datasource.friendFrom(id)
+        performSegue(withIdentifier: "showFriend", sender: self)
     }
 }
 
 extension FriendTableViewController  {
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell")
-        
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
         let person = datasource.people[indexPath.row]
         cell?.textLabel?.text = person.name
         
         return cell!
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return datasource.people.count
     }
     
     // This shouldn't be necessary as the tap action is in the Storyboard, but it doesn't seem to be working in beta 1.
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedIndex = tableView.indexPathForSelectedRow?.row
         lastSelectedFriend = datasource.people[selectedIndex!]
         
-        performSegueWithIdentifier("showFriend", sender: self)
+        performSegue(withIdentifier: "showFriend", sender: self)
     }
 }

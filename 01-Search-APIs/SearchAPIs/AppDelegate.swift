@@ -14,19 +14,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         return true
     }
     
-    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         // Find the ID from the user info
         let friendID = userActivity.userInfo?["kCSSearchableItemActivityIdentifier"] as! String
         
         // Find the root table view controller and make it show the friend with this ID.
         let navigationController = (window?.rootViewController as! UINavigationController)
-        navigationController.popToRootViewControllerAnimated(false)
+        navigationController.popToRootViewController(animated: false)
         let friendTableViewController = navigationController.viewControllers.first as! FriendTableViewController
-        friendTableViewController.showFriend(friendID)
+        friendTableViewController.showFriend(id: friendID)
         
         return true
     }

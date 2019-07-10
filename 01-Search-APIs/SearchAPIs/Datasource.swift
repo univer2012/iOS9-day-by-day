@@ -47,7 +47,7 @@ class Datasource: NSObject {
         people = [becky, ben, jane, pete, ray, tom]
     }
     
-    func friendFromID(id: String) -> Person? {
+    func friendFrom(_ id: String) -> Person? {
         for person in people {
             if person.id == id {
                 return person
@@ -64,15 +64,14 @@ class Datasource: NSObject {
             let attributeSet = CSSearchableItemAttributeSet(itemContentType: "image" as String)
             attributeSet.title = person.name
             attributeSet.contentDescription = "This is an entry all about the interesting person called \(person.name)"
-            attributeSet.thumbnailData = UIImagePNGRepresentation(person.image) // Doesn't work in beta 1. Known issue.
-
+            attributeSet.thumbnailData = person.image.pngData() // Doesn't work in beta 1. Known issue.
             let item = CSSearchableItem(uniqueIdentifier: person.id, domainIdentifier: "com.ios9daybyday.SearchAPIs.people", attributeSet: attributeSet)
             searchableItems.append(item)
         }
         
-        CSSearchableIndex.defaultSearchableIndex().indexSearchableItems(searchableItems, completionHandler: { error -> Void in
+        CSSearchableIndex.default().indexSearchableItems(searchableItems, completionHandler: { error -> Void in
             if error != nil {
-                print(error?.localizedDescription)
+                print(error?.localizedDescription as Any)
             }
         })
     }
